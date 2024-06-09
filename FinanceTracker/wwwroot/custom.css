@@ -132,5 +132,23 @@ Login page
 }
 
 
+/*
+    Home page
+*/
+
+.logout{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logout-btn{
+    border: none;
+    border-radius: 5px;
+    width: 70px;
+    height: 30px;
+    border-radius: 10px;
+    display: block;
+
+}
 
 
