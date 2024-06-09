@@ -11,6 +11,11 @@
 
 <PageTitle>Dashboard</PageTitle>
 
+ <div class="logout-container">
+        <button @onclick="Logout">Logout</button>
+    </div>
+
+
 <h1 class="page-title">Dashboard</h1>
 
 @if (transactions == null)
@@ -37,6 +42,7 @@ else
         </tbody>
     </table>
 }
+
 
 
 
@@ -101,5 +107,9 @@ else
                 transactions.Add(transaction);
             }
         }
+    }
+    private void Logout(){
+        ((CustomAuthStateProvider)AuthStateProvider).Logout();
+        Navigation.NavigateTo("/login", true);
     }
 }

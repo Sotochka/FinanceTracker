@@ -26,5 +26,11 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         }, "auth") : _anonymous.Identity;
         return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
     }
+    public void Logout()
+    {
+        _currentUser = null;
+        var principal = new ClaimsPrincipal(_anonymous.Identity);
+        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
+    }
 
 }

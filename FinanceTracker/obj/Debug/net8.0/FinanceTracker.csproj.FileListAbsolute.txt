@@ -265,3 +265,5 @@ D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Npgsql.dll
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\Coding\FinanceTracker\FinanceTracker\obj\Debug\net8.0\scopedcss\Components\Layout\LoginLayout.razor.rz.scp.css
 D:\Coding\FinanceTracker\FinanceTracker\obj\Debug\net8.0\FinanceTracker.sourcelink.json
+D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\appsettings.Development.json
+D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\appsettings.json
