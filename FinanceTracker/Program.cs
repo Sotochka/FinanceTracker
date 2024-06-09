@@ -22,6 +22,7 @@ builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<CustomAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddAuthorizationCore();
+builder.Services.AddHttpContextAccessor();
 
 
 
