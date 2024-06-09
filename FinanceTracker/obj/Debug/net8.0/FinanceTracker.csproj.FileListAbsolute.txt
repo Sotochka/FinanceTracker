@@ -148,8 +148,6 @@ D:\Programs\VsProjects\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Microsoft.
 D:\Programs\VsProjects\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
 D:\Programs\VsProjects\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Programs\VsProjects\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
-D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\appsettings.Development.json
-D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\appsettings.json
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\FinanceTracker.staticwebassets.runtime.json
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\FinanceTracker.exe
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\FinanceTracker.deps.json
@@ -266,3 +264,4 @@ D:\Coding\FinanceTracker\FinanceTracker\obj\Debug\net8.0\ref\FinanceTracker.dll
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Npgsql.dll
 D:\Coding\FinanceTracker\FinanceTracker\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 D:\Coding\FinanceTracker\FinanceTracker\obj\Debug\net8.0\scopedcss\Components\Layout\LoginLayout.razor.rz.scp.css
+D:\Coding\FinanceTracker\FinanceTracker\obj\Debug\net8.0\FinanceTracker.sourcelink.json
