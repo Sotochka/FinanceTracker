@@ -1,0 +1,11 @@
+
+.page{
+    min-height: 100vh;
+    background-color: #000010FF;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+}

@@ -1,0 +1,54 @@
+@layout LoginLayout
+@page "/"
+@page "/register"
+
+@rendermode InteractiveServer
+
+@using FinanceTracker.Components.Data
+@using FinanceTracker.Components.Layout
+@using FinanceTracker.Services
+@inject UserService UserService
+@inject NavigationManager Navigation
+
+<PageTitle>Register</PageTitle>
+
+
+<div class="register">
+    <h2 class="register-heading">
+        Getting started
+    </h2>
+    <p class="register-text">
+        Let's create an account and save more money from unwanted expenses
+    </p>
+    <div class="register-form">
+        <EditForm Model="user" OnValidSubmit="HandleValidSubmit" class="register-form">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="register-form-login">
+                <label for="login">Login</label>
+                <InputText @bind-Value="user.Login" class="register-form-login-input" />
+            </div>
+            <div class="register-form-password">
+                <label for="password">Password</label>
+                <InputText @bind-Value="user.Password" type="password" class="register-form-password-input" />
+            </div> 
+            <button type="submit" class="register-form-btn">Create account</button> 
+        </EditForm>
+    </div>
+    <div class="sign-in">
+        <p>Already have an account? <a href="/login" class="register-user">Sign in</a></p>
+    </div>
+</div>
+
+
+@code {
+    User user = new User();
+    private async Task HandleValidSubmit()
+    {
+        var success = await UserService.Register(user.Login, user.Password);
+        if (success)
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

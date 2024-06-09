@@ -1,0 +1,105 @@
+﻿@page "/home"
+
+@rendermode InteractiveServer
+@using FinanceTracker.Components.Data
+@using FinanceTracker.Services
+
+@inject UserService UserService
+@inject TransactionService TransactionService
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Dashboard</PageTitle>
+
+<h1 class="page-title">Dashboard</h1>
+
+@if (transactions == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in transactions)
+            {
+                <tr>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+<EditForm Model="@newTransaction" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Description:</label>
+        <InputText @bind-Value="newTransaction.Description" />
+    </div>
+    <div>
+        <label>Amount:</label>
+        <InputNumber @bind-Value="newTransaction.Amount" />
+    </div>
+    <button type="submit">Add Transaction</button>
+</EditForm>
+
+
+@code{
+
+    private List<Transaction> transactions; 
+    private NewTransaction newTransaction = new NewTransaction();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var login = authState.User.Identity.Name;
+
+        if (login != null)
+        {
+            var user = await UserService.GetUserByLogin(login);
+            if (user != null)
+            {
+                var userId = user.Id;
+                transactions = await TransactionService.GetTransactionsByUserId(userId);
+            }
+        }
+    }
+
+    private async Task LoadTransactions(int userId)
+    {
+        transactions = await TransactionService.GetTransactionsByUserId(userId);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var login = authState.User.Identity.Name;
+
+        if(login != null)
+        {
+            var user = await UserService.GetUserByLogin(login);
+            if(user != null)
+            {
+                var transaction = new Transaction
+                {
+                    Description = newTransaction.Description,
+                    Amount = newTransaction.Amount,
+                    UserId = user.Id
+                };
+                await TransactionService.AddTransaction(transaction);
+                transactions.Add(transaction);
+            }
+        }
+    }
+}

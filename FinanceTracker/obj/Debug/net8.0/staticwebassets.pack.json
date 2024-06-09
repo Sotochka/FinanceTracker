@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\FinanceTracker.bundle.scp.css",
+      "PackagePath": "staticwebassets\\FinanceTracker.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\custom.css",
+      "PackagePath": "staticwebassets\\custom.css"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FinanceTracker.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.FinanceTracker.props",
+      "PackagePath": "build\\FinanceTracker.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.FinanceTracker.props",
+      "PackagePath": "buildMultiTargeting\\FinanceTracker.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.FinanceTracker.props",
+      "PackagePath": "buildTransitive\\FinanceTracker.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
