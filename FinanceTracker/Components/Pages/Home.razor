@@ -11,24 +11,21 @@
 
 <PageTitle>Dashboard</PageTitle>
 
- <div class="logout">
-        <button @onclick="Logout" class="logout-btn">Logout</button>
-    </div>
+<div class="logout">
+    <button @onclick="Logout" class="logout-btn">Logout</button>
+</div>
 
 
 <h1 class="page-title">Dashboard</h1>
-
-@if (transactions == null)
+@if (transactions != null)
 {
-    <p>Loading...</p>
-}
-else
-{
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Description</th>
                 <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
@@ -37,10 +34,18 @@ else
                 <tr>
                     <td>@transaction.Description</td>
                     <td>@transaction.Amount</td>
+                    <td>@transaction.Category</td>
+                    <td>
+                        <button @onclick="() => DeleteTransaction(transaction.Id)">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+}
+else
+{
+    <p>Loading...</p>
 }
 
 
@@ -55,6 +60,10 @@ else
         <InputText @bind-Value="newTransaction.Description" />
     </div>
     <div>
+        <label>Category</label>
+        <InputText @bind-Value="newTransaction.Category"/>
+    </div>
+    <div>
         <label>Amount:</label>
         <InputNumber @bind-Value="newTransaction.Amount" />
     </div>
@@ -63,9 +72,9 @@ else
 
 
 @code{
-
     private List<Transaction> transactions; 
     private NewTransaction newTransaction = new NewTransaction();
+   
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -100,6 +109,7 @@ else
                 var transaction = new Transaction
                 {
                     Description = newTransaction.Description,
+                    Category = newTransaction.Category,
                     Amount = newTransaction.Amount,
                     UserId = user.Id
                 };
@@ -112,4 +122,15 @@ else
         ((CustomAuthStateProvider)AuthStateProvider).Logout();
         Navigation.NavigateTo("/login", true);
     }
+
+    private async Task DeleteTransaction(int transactionId)
+    {
+        await TransactionService.DeleteTransaction(transactionId);
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userName = authState.User.Identity.Name;
+        var user = await UserService.GetUserByLogin(userName);
+        transactions = await TransactionService.GetTransactionsByUserId(user.Id);
+        StateHasChanged();
+    }
+
 }

@@ -27,6 +27,15 @@ public class TransactionService
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteTransaction(int transactionId)
+    {
+        var transaction = await _context.Transactions.FindAsync(transactionId);
+        if (transaction != null)
+        {
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+        }
+    }
 
 
 }
