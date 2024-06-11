@@ -53,40 +53,14 @@ else
     <p>Loading...</p>
 }
 
+<button class="btn btn-primary" @onclick="ShowModal">Add Transaction</button>
 
-
-
-<EditForm Model="@newTransaction" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label>Description:</label>
-        <InputText @bind-Value="newTransaction.Description" />
-    </div>
-    <div>
-        <label>Category</label>
-        <InputText @bind-Value="newTransaction.Category"/>
-    </div>
-    <div>
-        <label>Amount:</label>
-        <InputNumber @bind-Value="newTransaction.Amount" />
-    </div>
-    <div>
-        <label for="type">Type:</label>
-        <InputSelect @bind-Value="newTransaction.Type">
-            <option value="">Select Type</option>
-            <option value="Receive">Receive</option>
-            <option value="Send">Send</option>
-        </InputSelect>
-    </div>
-    <button type="submit">Add Transaction</button>
-</EditForm>
+<AddTransactionModal Visible="@showModal" OnTransactionAdded="RefreshTransactions" />
 
 
 @code{
     private List<Transaction> transactions; 
-    private NewTransaction newTransaction = new NewTransaction();
+    public bool showModal = false;
    
     protected override async Task OnInitializedAsync()
     {
@@ -104,11 +78,37 @@ else
         }
     }
 
-    private async Task LoadTransactions(int userId)
+    private async Task LoadTransactions()
     {
-        transactions = await TransactionService.GetTransactionsByUserId(userId);
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var login = authState.User.Identity.Name;
+
+        // Assuming you have a method in UserService to get User by login
+        var user = await UserService.GetUserByLogin(login);
+
+        transactions = await TransactionService.GetTransactionsByUserId(user.Id);
     }
 
+    public void ShowModal()
+    {
+        showModal = true;
+    }
+    private void HideModal()
+    {
+        showModal = false;
+    }
+    private async Task RefreshTransactions()
+    {
+        await LoadTransactions();
+        showModal = false;
+        StateHasChanged();
+    }
+
+
+
+
+
+/* 
     private async Task HandleValidSubmit()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -131,7 +131,9 @@ else
                 transactions.Add(transaction);
             }
         }
-    }
+    } 
+    
+    */
 
      private decimal GetTotalAmount()
     {

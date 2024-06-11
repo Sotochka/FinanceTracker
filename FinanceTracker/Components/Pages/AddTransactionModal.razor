@@ -1,0 +1,86 @@
+﻿
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+@using FinanceTracker.Services
+@using FinanceTracker.Components.Data
+
+@inject NavigationManager Navigation
+@inject TransactionService TransactionService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserService UserService
+
+
+@if (Visible)
+{
+    <div class="modal show" tabindex="-1" style="display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Transaction</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">                 
+                    <EditForm Model="@newTransaction" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div>
+                            <label>Description:</label>
+                            <InputText @bind-Value="newTransaction.Description" />
+                        </div>
+                        <div>
+                            <label>Category</label>
+                            <InputText @bind-Value="newTransaction.Category"/>
+                        </div>
+                        <div>
+                            <label>Amount:</label>
+                            <InputNumber @bind-Value="newTransaction.Amount" />
+                        </div>
+                        <div>
+                            <label for="type">Type:</label>
+                            <InputSelect @bind-Value="newTransaction.Type">
+                                <option value="">Select Type</option>
+                                <option value="Receive">Receive</option>
+                                <option value="Send">Send</option>
+                            </InputSelect>
+                        </div>
+                        <button type="submit">Add Transaction</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool Visible{get;set;}
+    [Parameter] public EventCallback OnTransactionAdded { get; set; }
+
+    private NewTransaction newTransaction = new NewTransaction();
+
+     private async Task HandleValidSubmit()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var login = authState.User.Identity.Name;
+
+        var user = await UserService.GetUserByLogin(login);
+
+        var transaction = new Transaction
+        {
+            Description = newTransaction.Description,
+            Amount = newTransaction.Amount,
+            Category = newTransaction.Category,
+            Type = newTransaction.Type,
+            UserId = user.Id
+        };
+        await TransactionService.AddTransaction(transaction);
+        await OnTransactionAdded.InvokeAsync();
+        CloseModal();
+    }
+
+    public void CloseModal()
+    {
+        Visible = false;
+    }
+
+}
