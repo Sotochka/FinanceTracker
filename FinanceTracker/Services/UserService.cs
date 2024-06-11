@@ -18,7 +18,7 @@ public class UserService
             {
                 return false; // Username already exists
             }
-
+            
             var user = new User
             {
                 Login = login,

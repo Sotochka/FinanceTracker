@@ -20,11 +20,11 @@
     <div class="login-form">
         <div class="login-form-login">
             <label for="Login">Login:</label>
-            <input @bind="login" type="text" class="login-form-login-input" />
+            <input @bind="login" type="text" class="login-form-login-input" required />
         </div>
         <div class="login-form-password">
             <label for="Password">Password:</label>
-            <input @bind="password" type="password" class="login-form-password-input" />
+            <input @bind="password" type="password" class="login-form-password-input" required />
         </div>
         <button @onclick="LoginUser" class="login-form-btn">Login</button>
     </div>
