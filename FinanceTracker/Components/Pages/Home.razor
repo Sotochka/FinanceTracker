@@ -19,6 +19,10 @@
 <h1 class="page-title">Dashboard</h1>
 @if (transactions != null)
 {
+    
+    <div class="total-amount">
+        <h4>Total Amount: @GetTotalAmount()</h4>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -38,6 +42,7 @@
                     <td>
                         <button @onclick="() => DeleteTransaction(transaction.Id)">Delete</button>
                     </td>
+                    <td>@transaction.Type</td>
                 </tr>
             }
         </tbody>
@@ -66,6 +71,14 @@ else
     <div>
         <label>Amount:</label>
         <InputNumber @bind-Value="newTransaction.Amount" />
+    </div>
+    <div>
+        <label for="type">Type:</label>
+        <InputSelect @bind-Value="newTransaction.Type">
+            <option value="">Select Type</option>
+            <option value="Receive">Receive</option>
+            <option value="Send">Send</option>
+        </InputSelect>
     </div>
     <button type="submit">Add Transaction</button>
 </EditForm>
@@ -111,6 +124,7 @@ else
                     Description = newTransaction.Description,
                     Category = newTransaction.Category,
                     Amount = newTransaction.Amount,
+                    Type = newTransaction.Type,
                     UserId = user.Id
                 };
                 await TransactionService.AddTransaction(transaction);
@@ -118,6 +132,12 @@ else
             }
         }
     }
+
+     private decimal GetTotalAmount()
+    {
+        return transactions.Sum(t => t.Type == "Receive" ? t.Amount : -t.Amount);
+    }
+
     private void Logout(){
         ((CustomAuthStateProvider)AuthStateProvider).Logout();
         Navigation.NavigateTo("/login", true);
