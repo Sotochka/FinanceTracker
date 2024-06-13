@@ -76,7 +76,7 @@
             if (user != null)
             {
                 var userId = user.Id;
-                transactions = await TransactionService.GetTransactionsByUserId(userId);
+                await LoadTransactions();
             }
         }
     }

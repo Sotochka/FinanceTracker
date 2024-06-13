@@ -207,6 +207,7 @@ Login page
     flex-direction: row;
     justify-content: space-between;
 }
+
 .transaction-heading{
     color: #fff;
     font-size: 20px;
