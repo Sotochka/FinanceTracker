@@ -11,49 +11,52 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<div class="logout">
-    <button @onclick="Logout" class="logout-btn">Logout</button>
-</div>
-
-
-<h1 class="page-title">Dashboard</h1>
-@if (transactions != null)
-{
-    
-    <div class="total-amount">
-        <h4>Total Amount: @GetTotalAmount()</h4>
+<header class="header">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="logout">
+        <button @onclick="Logout" class="logout-btn">Logout</button>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
+</header>
+
+<main class="main">
+    @if (transactions != null)
+    {
+        <div class="transaction-balance">
+            <p class="transaction-balance-text">Cash</p>
+            <p class="transaction-balance-amount">@GetTotalAmount()</p>
+        </div>
+    }
+
+    <div class="transaction-list">
+        @if (transactions != null)
+        {
+            <h2 class="transaction-heading">Last Transaction</h2>
             @foreach (var transaction in transactions)
             {
-                <tr>
-                    <td>@transaction.Description</td>
-                    <td>@transaction.Amount</td>
-                    <td>@transaction.Category</td>
-                    <td>
-                        <button @onclick="() => DeleteTransaction(transaction.Id)">Delete</button>
-                    </td>
-                    <td>@transaction.Type</td>
-                </tr>
+                <div class="transaction-item">
+                    <div class="transaction-item-content">
+                        @if (transaction.Type == "Receive")
+                        {
+                            <p class="transaction-item-amount green">+@transaction.Amount UAH</p>
+                        }
+                        else
+                        {
+                            <p class="transaction-item-amount">@transaction.Amount UAH</p>
+                        }
+                        <p class="transaction-item-description">@transaction.Description</p>
+                    </div>
+                    <img @onclick="() => DeleteTransaction(transaction.Id)" class="transaction-item-btn" src="Delete-button.svg.png"/>
+                </div>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Loading...</p>
-}
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </div>
 
-<button class="btn btn-primary" @onclick="ShowModal">Add Transaction</button>
+    <button class="btn btn-primary" @onclick="ShowModal">Add Transaction</button>
+</main>
 
 <AddTransactionModal Visible="@showModal" OnTransactionAdded="RefreshTransactions" />
 
@@ -103,38 +106,6 @@ else
         showModal = false;
         StateHasChanged();
     }
-
-
-
-
-
-/* 
-    private async Task HandleValidSubmit()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var login = authState.User.Identity.Name;
-
-        if(login != null)
-        {
-            var user = await UserService.GetUserByLogin(login);
-            if(user != null)
-            {
-                var transaction = new Transaction
-                {
-                    Description = newTransaction.Description,
-                    Category = newTransaction.Category,
-                    Amount = newTransaction.Amount,
-                    Type = newTransaction.Type,
-                    UserId = user.Id
-                };
-                await TransactionService.AddTransaction(transaction);
-                transactions.Add(transaction);
-            }
-        }
-    } 
-    
-    */
-
      private decimal GetTotalAmount()
     {
         return transactions.Sum(t => t.Type == "Receive" ? t.Amount : -t.Amount);
@@ -154,5 +125,4 @@ else
         transactions = await TransactionService.GetTransactionsByUserId(user.Id);
         StateHasChanged();
     }
-
 }

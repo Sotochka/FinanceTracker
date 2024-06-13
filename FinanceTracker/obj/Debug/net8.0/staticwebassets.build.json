@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "UOfQG4lGUDtM8Ypp7JXaebCRwkzsalzryTGHPJv3YJs=",
+  "Hash": "MHM3vPVVGQEH+pPCYMa0NTi2uazB0BNXpnNDAHTeALw=",
   "Source": "FinanceTracker",
   "BasePath": "_content/FinanceTracker",
   "Mode": "Default",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\custom.css"
+    },
+    {
+      "Identity": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\Delete-button.svg.png",
+      "SourceId": "FinanceTracker",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\",
+      "BasePath": "_content/FinanceTracker",
+      "RelativePath": "Delete-button.svg.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Delete-button.svg.png"
     },
     {
       "Identity": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\favicon.png",

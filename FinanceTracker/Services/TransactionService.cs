@@ -9,7 +9,7 @@ public class TransactionService
     public TransactionService(AppDbContext context)
     {
         _context = context;
-    }
+    }   
     
     //Gets user by it's ID
     public async Task<List<Transaction>> GetTransactionsByUserId(int userId)
