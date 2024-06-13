@@ -12,7 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>((DbContextOptionsBuilder options) =>
+builder.Services.AddDbContext<AppDbContext>((DbContextOptionsBuilder options) =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<UserService>();

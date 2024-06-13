@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\FinanceTracker.bundle.scp.css"
     },
     {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\Delete-button.svg.png",
+      "PackagePath": "staticwebassets\\Delete-button.svg.png"
+    },
+    {
       "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
     },
