@@ -16,5 +16,6 @@ public class Transaction
     public string Category{ get; set; }
     [Required]
     public string Type{ get; set; }
+    public int WalletId { get; set; }   
 
 }

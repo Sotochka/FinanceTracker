@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Transaction> Transactions { get; set;}
+    public DbSet<Wallet> Wallets { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
