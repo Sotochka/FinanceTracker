@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 @using FinanceTracker.Components.Data
 @using FinanceTracker.Services
+@using FinanceTracker.Components.Pages
 
 @inject UserService UserService
 @inject TransactionService TransactionService
@@ -63,6 +64,7 @@
 </main>
 
 <AddWalletModalModal Visible="@showWalletModal"/>
+
 <AddTransactionModal Visible="@showModal" OnTransactionAdded="RefreshTransactions" />
 
 
@@ -75,7 +77,7 @@
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var login = authState.User.Identity.Name;   
+        var login = authState.User.Identity.Name;
 
         if (login != null)
         {

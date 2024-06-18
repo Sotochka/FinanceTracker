@@ -1,12 +1,13 @@
-﻿
-@rendermode InteractiveServer
+﻿@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.Authorization
 @using FinanceTracker.Services
 @using FinanceTracker.Components.Data
 
+@inject NavigationManager Navigation
 @inject CustomAuthStateProvider AuthStateProvider
 @inject WalletService WalletService
-@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserService UserService
 
 @if (Visible)
 {

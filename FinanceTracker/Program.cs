@@ -15,13 +15,13 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<AppDbContext>((DbContextOptionsBuilder options) =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddScoped<CustomAuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<WalletService>();
 
 /// Auth State Provider
-builder.Services.AddScoped<CustomAuthStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
 builder.Services.AddAuthorizationCore();
 builder.Services.AddHttpContextAccessor();
 
