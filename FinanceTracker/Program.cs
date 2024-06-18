@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>((DbContextOptionsBuilder options) =>
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<WalletService>();
 
 /// Auth State Provider
 builder.Services.AddScoped<CustomAuthStateProvider>();

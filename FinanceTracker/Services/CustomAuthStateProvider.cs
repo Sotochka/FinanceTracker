@@ -13,7 +13,8 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         _currentUser = user;
         var identity = user != null ? new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.Name, user.Login)
+            new Claim(ClaimTypes.Name, user.Login),
+            new Claim("UserId", user.Id.ToString())
         }, "auth") : _anonymous.Identity;
         var principal = new ClaimsPrincipal(identity);
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
@@ -22,7 +23,8 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
     {
         var identity = _currentUser != null ? new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.Name, _currentUser.Login)
+            new Claim(ClaimTypes.Name, _currentUser.Login),
+            new Claim("UserId", _currentUser.Id.ToString())
         }, "auth") : _anonymous.Identity;
         return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
     }
@@ -31,6 +33,10 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         _currentUser = null;
         var principal = new ClaimsPrincipal(_anonymous.Identity);
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(principal)));
+    }
+    public int GetCurrentUserId()
+    {
+        return _currentUser?.Id ?? -1; // Return -1 if user is not authenticated
     }
 
 }

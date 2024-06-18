@@ -1,0 +1,65 @@
+﻿
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+@using FinanceTracker.Services
+@using FinanceTracker.Components.Data
+
+@inject CustomAuthStateProvider AuthStateProvider
+@inject WalletService WalletService
+@inject NavigationManager Navigation
+
+@if (Visible)
+{
+    <EditForm Model="@wallet" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="wallet.Name" placeholder="Name" />
+        </div>
+        <div class="form-group">
+            <label for="balance">Initial Balance</label>
+            <InputNumber id="balance" class="form-control" @bind-Value="wallet.Balance" placeholder="Initial Balance" />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Wallet</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public bool Visible{get;set;}
+    
+    private Wallet wallet = new Wallet();
+    private string successMessage;
+    private string errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            // Get the current user's ID
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var userIdClaim = authState.User.FindFirst("UserId");
+
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+            {
+                await WalletService.AddWalletAsync(wallet, userId);
+                successMessage = "Wallet added successfully!";
+                wallet = new Wallet();
+            }
+            else
+            {
+                errorMessage = "User ID not found. Please log in again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+    
+    public void CloseModal()
+    {
+        Visible = false;
+    }
+}
