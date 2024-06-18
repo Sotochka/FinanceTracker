@@ -21,8 +21,9 @@ public class TransactionService
 
 
     //Add Transaction
-    public async Task AddTransaction(Transaction transaction)
+    public async Task AddTransaction(Transaction transaction, int walletId)
     {
+        transaction.WalletId = walletId;
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
     }
@@ -36,6 +37,9 @@ public class TransactionService
             await _context.SaveChangesAsync();
         }
     }
-
+    public async Task<List<Transaction>> GetTransactionsByWalletIdAsync(int walletId)
+    {
+        return await _context.Transactions.Where(t => t.WalletId == walletId).ToListAsync();
+    }
 
 }

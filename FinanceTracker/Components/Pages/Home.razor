@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 @using FinanceTracker.Components.Data
 @using FinanceTracker.Services
+@using FinanceTracker.Components.Pages
 
 @inject UserService UserService
 @inject TransactionService TransactionService
@@ -14,19 +15,23 @@
 <header class="header">
     <h1 class="page-title">Dashboard</h1>
     <div class="logout">
+        <button @onclick="ShowWalletModal">Add wallet</button>
         <button @onclick="Logout" class="logout-btn">Logout</button>
     </div>
 </header>
 
 <main class="main">
-    @if (transactions != null)
+    @if (wallets != null)
     {
-        <div class="transaction-balance">
-            <p class="transaction-balance-text">Cash</p>
-            <p class="transaction-balance-amount">@GetTotalAmount()</p>
-        </div>
+        foreach (var wallet in wallets)
+        {
+            <div class="transaction-balance">
+                <p class="transaction-balance-text">Cash</p>
+                <p class="transaction-balance-amount">@wallet.Balance</p>
+            </div>    
+        }
     }
-
+    
     <div class="transaction-list">
         @if (transactions != null)
         {
@@ -58,12 +63,16 @@
     <button class="btn btn-primary" @onclick="ShowModal">Add Transaction</button>
 </main>
 
+<AddWalletModalModal Visible="@showWalletModal"/>
+
 <AddTransactionModal Visible="@showModal" OnTransactionAdded="RefreshTransactions" />
 
 
 @code{
-    private List<Transaction> transactions; 
+    private List<Transaction> transactions;
+    private List<Wallet> wallets;
     public bool showModal = false;
+    public bool showWalletModal = false;
    
     protected override async Task OnInitializedAsync()
     {
@@ -80,7 +89,7 @@
             }
         }
     }
-
+    
     private async Task LoadTransactions()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -100,17 +109,20 @@
     {
         showModal = false;
     }
+    public void ShowWalletModal()
+    {
+        showModal = true;
+    }
+    private void HideWalletModal()
+    {
+        showModal = false;
+    }
     private async Task RefreshTransactions()
     {
         await LoadTransactions();
         showModal = false;
         StateHasChanged();
     }
-     private decimal GetTotalAmount()
-    {
-        return transactions.Sum(t => t.Type == "Receive" ? t.Amount : -t.Amount);
-    }
-
     private void Logout(){
         ((CustomAuthStateProvider)AuthStateProvider).Logout();
         Navigation.NavigateTo("/login", true);
@@ -125,4 +137,5 @@
         transactions = await TransactionService.GetTransactionsByUserId(user.Id);
         StateHasChanged();
     }
+    
 }
