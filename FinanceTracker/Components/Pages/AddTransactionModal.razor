@@ -96,22 +96,29 @@
     private async Task HandleValidSubmit()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var login = authState.User.Identity.Name;
+        var userIdClaim = authState.User.FindFirst("UserId");
+
+        // Assuming you have a method in UserService to get User by login
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+        {
+            var user = await UserService.GetUserByIdAsync(userId);
+            
+            int walletId = newTransaction.WalletId;
+            var transaction = new Transaction
+            {
+                Description = newTransaction.Description,
+                Amount = newTransaction.Amount,
+                Category = newTransaction.Category,
+                Type = newTransaction.Type,
+                UserId = user.Id
+            };
+            await TransactionService.AddTransaction(transaction, walletId);
+            await OnTransactionAdded.InvokeAsync();
+            CloseModal();
+        }
+
         
 
-        var user = await UserService.GetUserByLogin(login);
-        int walletId = newTransaction.WalletId;
-        var transaction = new Transaction
-        {
-            Description = newTransaction.Description,
-            Amount = newTransaction.Amount,
-            Category = newTransaction.Category,
-            Type = newTransaction.Type,
-            UserId = user.Id
-        };
-        await TransactionService.AddTransaction(transaction, walletId);
-        await OnTransactionAdded.InvokeAsync();
-        CloseModal();
     }
 
     public void CloseModal()

@@ -74,29 +74,35 @@
     public bool showModal = false;
     public bool showWalletModal = false;
    
+     private User user;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var login = authState.User.Identity.Name;
+        var userIdClaim = authState.User.FindFirst("UserId");
 
-        if (login != null)
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
         {
-            var user = await UserService.GetUserByLogin(login);
-            if (user != null)
-            {
-                var userId = user.Id;
-                await LoadTransactions();
-            }
+            user = await UserService.GetUserByIdAsync(userId);
+            await LoadTransactions();
+        }
+        else
+        {
+            // Handle case where user is not authenticated
         }
     }
     
     private async Task LoadTransactions()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var login = authState.User.Identity.Name;
+        var userIdClaim = authState.User.FindFirst("UserId");
 
         // Assuming you have a method in UserService to get User by login
-        var user = await UserService.GetUserByLogin(login);
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+        {
+            var user = await UserService.GetUserByIdAsync(userId);
+            
+        }
 
         transactions = await TransactionService.GetTransactionsByUserId(user.Id);
     }
@@ -124,7 +130,7 @@
         StateHasChanged();
     }
     private void Logout(){
-        ((CustomAuthStateProvider)AuthStateProvider).Logout();
+        ((CustomAuthStateProvider)AuthStateProvider).LogoutAsync();
         Navigation.NavigateTo("/login", true);
     }
 
@@ -132,8 +138,12 @@
     {
         await TransactionService.DeleteTransaction(transactionId);
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userName = authState.User.Identity.Name;
-        var user = await UserService.GetUserByLogin(userName);
+        var userIdClaim = authState.User.FindFirst("UserId");
+        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+        {
+            var user = await UserService.GetUserByIdAsync(userId);
+            
+        }
         transactions = await TransactionService.GetTransactionsByUserId(user.Id);
         StateHasChanged();
     }
