@@ -3,35 +3,48 @@
 @rendermode InteractiveServer
 @using FinanceTracker.Components.Data
 @using FinanceTracker.Services
-@using FinanceTracker.Components.Pages
 
 @inject UserService UserService
 @inject TransactionService TransactionService
+@inject WalletService WalletService
 @inject CustomAuthStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
 <PageTitle>Dashboard</PageTitle>
 
+<AddWalletModal @ref="addWalletModal" OnWalletAdded="OnWalletAdded" />
+
 <header class="header">
     <h1 class="page-title">Dashboard</h1>
     <div class="logout">
-        <button @onclick="ShowWalletModal">Add wallet</button>
+        <button @onclick="ShowAddWalletModal" class="add-wallet-btn">Add New Wallet</button>
         <button @onclick="Logout" class="logout-btn">Logout</button>
     </div>
 </header>
 
 <main class="main">
-    @if (wallets != null)
-    {
-        foreach (var wallet in wallets)
+    <div class="wallet-list">
+        @if (wallets != null)
         {
-            <div class="transaction-balance">
-                <p class="transaction-balance-text">Cash</p>
-                <p class="transaction-balance-amount">@wallet.Balance</p>
-            </div>    
+            foreach (var wallet in wallets)
+            {
+                <div class="wallet-balance">
+
+                    <a href="/wallets/@wallet.Id" class="wallet-ref">
+                        <p class="wallet-balance-name">@wallet.Name</p>
+                        <p class="wallet-balance-amount">@wallet.Balance UAH</p>
+                    </a>
+                </div>
+            }
         }
-    }
-    
+        else
+        {
+            <div>
+                <p>Wallets not found</p>
+            </div>
+        }
+    </div>
+
     <div class="transaction-list">
         @if (transactions != null)
         {
@@ -60,92 +73,66 @@
         }
     </div>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Add Transaction</button>
 </main>
-
-<AddWalletModalModal Visible="@showWalletModal"/>
-
-<AddTransactionModal Visible="@showModal" OnTransactionAdded="RefreshTransactions" />
 
 
 @code{
+    private AddWalletModal addWalletModal;
     private List<Transaction> transactions;
     private List<Wallet> wallets;
-    public bool showModal = false;
-    public bool showWalletModal = false;
-   
-     private User user;
+    private User user;
 
-    protected override async Task OnInitializedAsync()
+    private async Task<int> GetUserIdAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var userIdClaim = authState.User.FindFirst("UserId");
-
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-        {
-            user = await UserService.GetUserByIdAsync(userId);
-            await LoadTransactions();
-        }
-        else
-        {
-            // Handle case where user is not authenticated
-        }
+        return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await GetUserIdAsync();   
+        user = await UserService.GetUserByIdAsync(userId);
+        await LoadWallets();
+        await LoadTransactions();
     }
     
     private async Task LoadTransactions()
     {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userIdClaim = authState.User.FindFirst("UserId");
+        var userId = await GetUserIdAsync();
+        transactions = await TransactionService.GetTransactionsByUserId(userId);
+    }
 
-        // Assuming you have a method in UserService to get User by login
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+    private async Task LoadWallets()
+    {
+        var userId = await GetUserIdAsync();
+        wallets = await WalletService.GetWalletsByUserIdAsync(userId);
+
+        foreach (var wallet in wallets)
         {
-            var user = await UserService.GetUserByIdAsync(userId);
-            
+            wallet.Balance = await WalletService.GetWalletBalanceAsync(wallet.Id);
         }
 
-        transactions = await TransactionService.GetTransactionsByUserId(user.Id);
     }
-
-    public void ShowModal()
-    {
-        showModal = true;
-    }
-    private void HideModal()
-    {
-        showModal = false;
-    }
-    public void ShowWalletModal()
-    {
-        showModal = true;
-    }
-    private void HideWalletModal()
-    {
-        showModal = false;
-    }
-    private async Task RefreshTransactions()
-    {
-        await LoadTransactions();
-        showModal = false;
-        StateHasChanged();
-    }
-    private void Logout(){
-        ((CustomAuthStateProvider)AuthStateProvider).LogoutAsync();
+    private async Task Logout(){
+        await ((CustomAuthStateProvider)AuthStateProvider).LogoutAsync();
         Navigation.NavigateTo("/login", true);
     }
 
     private async Task DeleteTransaction(int transactionId)
     {
-        await TransactionService.DeleteTransaction(transactionId);
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userIdClaim = authState.User.FindFirst("UserId");
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-        {
-            var user = await UserService.GetUserByIdAsync(userId);
-            
-        }
-        transactions = await TransactionService.GetTransactionsByUserId(user.Id);
-        StateHasChanged();
+        var userId = await GetUserIdAsync();
+            transactions = await TransactionService.GetTransactionsByUserId(userId);
+            StateHasChanged();
     }
     
+    private async Task OnWalletAdded()
+    {
+        await LoadWallets();
+    }
+
+    private void ShowAddWalletModal()
+    {
+        addWalletModal.Show();
+    }
 }

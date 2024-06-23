@@ -30,7 +30,39 @@ public class WalletService
             await _context.SaveChangesAsync();
         }
     }
+    public async Task<decimal> GetWalletBalanceAsync(int walletId)
+    {
+        var transactions = await _context.Transactions
+            .Where(t => t.WalletId == walletId)
+            .ToListAsync();
 
+        decimal balance = transactions
+            .Where(t => t.Type == "Receive")
+            .Sum(t => t.Amount) - transactions
+            .Where(t => t.Type == "Send")
+            .Sum(t => t.Amount);
+
+        return balance;
+    }
+    public async Task UpdateWalletBalanceAsync(int walletId)
+    {
+        var transactions = await _context.Transactions
+            .Where(t => t.WalletId == walletId)
+            .ToListAsync();
+
+        decimal balance = transactions
+            .Where(t => t.Type == "Receive")
+            .Sum(t => t.Amount) - transactions
+            .Where(t => t.Type == "Send")
+            .Sum(t => t.Amount);
+
+        var wallet = await _context.Wallets.FindAsync(walletId);
+        if (wallet != null)
+        {
+            wallet.Balance = balance;
+            await _context.SaveChangesAsync();
+        }
+    }
 
 
 }
