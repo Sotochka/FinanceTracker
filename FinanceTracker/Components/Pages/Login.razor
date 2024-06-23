@@ -18,15 +18,19 @@
     <h2 class="login-heading">Welcome back</h2>
     <p class="login-text">Hope you enjoy using our app</p>
     <div class="login-form">
-        <div class="login-form-login">
-            <label for="Login">Login:</label>
-            <input @bind="login" type="text" class="login-form-login-input" required />
-        </div>
-        <div class="login-form-password">
-            <label for="Password">Password:</label>
-            <input @bind="password" type="password" class="login-form-password-input" required />
-        </div>
-        <button @onclick="LoginUser" class="login-form-btn">Login</button>
+        <EditForm Model="user" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="login-form-login">
+                <label for="Login">Login:</label>
+                <InputText @bind-Value="user.Login" id="Login" type="text" class="login-form-login-input" required />
+            </div>
+            <div class="login-form-password">
+                <label for="Password">Password:</label>
+                <InputText @bind-Value="user.Password" id="Password" type="password" class="login-form-password-input" required />
+            </div>
+            <button type="submit" class="login-form-btn">Login</button>
+        </EditForm>
     </div>
     <div class="sign-in">
         <p>Don't have an account? <a href="/register" class="register-user">Sign up</a></p>
@@ -36,20 +40,28 @@
 
 
 @code {
-    string login;
-    string password;
+   private User user = new User();
 
-    private async Task LoginUser()
+    private async Task HandleValidSubmit()
     {
-        var user = await UserService.Login(login, password);
-        if (user != null)
+        try
         {
-            AuthStateProvider.SetUser(user);
-            Navigation.NavigateTo("/home");
+            var validUser = await UserService.Login(user);
+            if (validUser != null)
+            {
+                await AuthStateProvider.SetUser(validUser);
+                Navigation.NavigateTo("/home");
+            }
+            else
+            {
+                // Show error message
+                Console.WriteLine("Invalid login credentials");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            
+            // Handle the exception (e.g., show an error message)
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 }

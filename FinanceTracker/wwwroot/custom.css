@@ -138,13 +138,27 @@ Login page
     width: 150px;
 }
 
+.add-wallet-btn{
+    background: rgba(255,255,255,0.37);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    margin-right: 10px;
+    width: 130px;
+}
+.add-wallet-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
 .header{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 50px;
 }
 
 .page-title{
+    color: white;
     font-size: x-large;
 }
 
@@ -155,11 +169,15 @@ Login page
 
 .logout-btn{
     border: none;
-    border-radius: 2px;
+    background: rgba(255,255,255,0.37);
     width: 70px;
     height: 30px;
     border-radius: 10px;
-    display: block;
+    color: white;
+    
+}
+.logout-btn:hover{
+    background: rgba(255,255,255,0.1);
 }
 
 .main{
@@ -167,23 +185,26 @@ Login page
     flex-direction: column;
 }
 
-
-.transaction-balance{
+.wallet-list{
+    display: flex;
+}
+.wallet-balance{
     display: flex;
     background: #1d1e22;
     border-radius: 5px;
-    width: 150px;
+    width: 200px;
     flex-direction: column;
     margin-bottom: 20px;
-    padding: 10px;
+    padding: 13px 0 7px 10px;
+    margin-right: 13px;
 }
 
-.transaction-balance-text{
+.wallet-balance-name{
     color: #fff;
     font-size: 11px;
     margin-bottom: 0;
 }
-.transaction-balance-amount{
+.wallet-balance-amount{
     color: #fff;
     font-size: 20px;
     margin-bottom: 0;
@@ -234,6 +255,42 @@ Login page
     height: 60%;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
+
+
+
+
+
+/*
+    Wallets
+*/
+.form-group{
+    margin-bottom: 10px;
+}
+
+.wallets-list{
+    display: flex;
+}
+.wallet-ref{
+    text-decoration: none;
+    color: white;
+}
+
+.wallet-name {
+    background: #1d1e22;
+    display: block;
+    width: 100px;
+    height: 50px;
+    color: white;
+    margin-right: 10px;
+    align-content: center;
+    text-align: center;
+    border-radius: 10px;
+}
+.wallet-name:hover{
+    background: #2A2A30FF;
+}
+
 
 

@@ -2,11 +2,13 @@ using FinanceTracker.Components;
 using FinanceTracker.Components.Data;
 using FinanceTracker.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // Add services to the container.
 
@@ -15,13 +17,16 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<AppDbContext>((DbContextOptionsBuilder options) =>
     options.UseNpgsql(connectionString));
 
+
+builder.Services.AddScoped<ProtectedSessionStorage>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<CustomAuthStateProvider>();
+builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<WalletService>();
 
 /// Auth State Provider
-builder.Services.AddScoped<CustomAuthStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthStateProvider>());
-builder.Services.AddAuthorizationCore();
 builder.Services.AddHttpContextAccessor();
 
 

@@ -6,9 +6,11 @@ namespace FinanceTracker.Services;
 public class TransactionService
 {
     private readonly AppDbContext _context;
-    public TransactionService(AppDbContext context)
+    private readonly WalletService _walletService;
+    public TransactionService(AppDbContext context, WalletService walletService)
     {
         _context = context;
+        _walletService = walletService;
     }   
     
     //Gets user by it's ID
@@ -21,10 +23,12 @@ public class TransactionService
 
 
     //Add Transaction
-    public async Task AddTransaction(Transaction transaction)
+    public async Task AddTransaction(Transaction transaction, int walletId)
     {
+        transaction.WalletId = walletId;
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
+        await _walletService.UpdateWalletBalanceAsync(walletId);
     }
 
     public async Task DeleteTransaction(int transactionId)
@@ -34,8 +38,12 @@ public class TransactionService
         {
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
+            await _walletService.UpdateWalletBalanceAsync(transaction.WalletId);
         }
     }
-
+    public async Task<List<Transaction>> GetTransactionsByWalletIdAsync(int walletId)
+    {
+        return await _context.Transactions.Where(t => t.WalletId == walletId).ToListAsync();
+    }
 
 }

@@ -1,0 +1,64 @@
+﻿@page "/wallets"
+
+@rendermode InteractiveServer
+@using FinanceTracker.Components.Data
+@using FinanceTracker.Services
+@using FinanceTracker.Components
+
+@inject UserService UserService
+@inject TransactionService TransactionService
+@inject WalletService WalletService
+@inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Wallets</PageTitle>
+ 
+<h1 class="page-title">Wallets</h1>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+else
+{
+    <div class="wallets-list">
+            @foreach (var wallet in wallets)
+            {
+                <a href="/wallets/@wallet.Id" class="wallet-ref">
+                    <div class="wallet-name">
+                        @wallet.Name
+                    </div>
+                </a>
+            }
+    </div>
+}
+
+
+
+@code {
+    private List<Wallet> wallets = new List<Wallet>();
+    private string errorMessage;
+
+    private User user;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Assuming you have a method to get the user ID from the current authentication state
+            var userId = await GetCurrentUserIdAsync();
+            wallets = await WalletService.GetWalletsByUserIdAsync(userId);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred while fetching wallets: {ex.Message}";
+        }
+    }
+    
+    private async Task<int> GetCurrentUserIdAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst("UserId");
+        return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
+    }
+    
+}

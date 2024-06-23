@@ -1,0 +1,105 @@
+@page "/wallets/{walletId:int}"
+@using FinanceTracker.Components.Data
+@using FinanceTracker.Services
+@inject WalletService WalletService
+@inject UserService UserService
+@inject TransactionService TransactionService
+@inject CustomAuthStateProvider AuthStateProvider
+
+<h3 class="page-title">Transactions for Wallet @WalletId</h3>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+<div class="alert alert-danger">@errorMessage</div>
+}
+else if (transactions.Count == 0)
+{
+    <div style="margin-bottom: 10px">No transactions found for this wallet.</div>
+    <button @onclick="ShowAddTransactionModal" class="btn btn-primary">Add Transaction</button>
+}
+else
+{
+    <div class="transaction-list">
+        @if (transactions != null)
+        {
+            @foreach (var transaction in transactions)
+            {
+                <div class="transaction-item">
+                    <div class="transaction-item-content">
+                        @if (transaction.Type == "Receive")
+                        {
+                            <p class="transaction-item-amount green">+@transaction.Amount UAH</p>
+                        }
+                        else
+                        {
+                            <p class="transaction-item-amount">@transaction.Amount UAH</p>
+                        }
+                        <p class="transaction-item-description">@transaction.Description</p>
+                    </div>
+                    <img @onclick="() => DeleteTransaction(transaction.Id)" class="transaction-item-btn" src="Delete-button.svg.png"/>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+        <button @onclick="ShowAddTransactionModal" class="btn btn-primary">Add Transaction</button>
+    </div>
+}
+
+<AddTransactionModal @ref="addTransactionModal" WalletId="@WalletId" OnTransactionAdded="OnTransactionAdded" />
+
+
+@code {
+    [Parameter] public int WalletId { get; set; }
+    
+    private AddTransactionModal addTransactionModal;
+    private List<Transaction> transactions = new();
+    private string errorMessage;
+    private Wallet wallet;
+    private List<Wallet> wallets;
+    private User user;
+
+    private async Task<int> GetUserIdAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst("UserId");
+        return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            transactions = await TransactionService.GetTransactionsByWalletIdAsync(WalletId);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred while fetching transactions: {ex.Message}";
+        }
+    }
+    
+    private async Task DeleteTransaction(int transactionId)
+    {
+        var userId = await GetUserIdAsync();
+        transactions = await TransactionService.GetTransactionsByUserId(userId);
+        StateHasChanged();
+    }
+    
+    private async Task LoadTransactions()
+    {
+        var userId = await GetUserIdAsync();
+        transactions = await TransactionService.GetTransactionsByUserId(userId);
+    }
+    
+    private async Task OnTransactionAdded()
+    {
+        await LoadTransactions();
+    }
+
+    private void ShowAddTransactionModal()
+    {
+        addTransactionModal.Show();
+    }
+}
