@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXYWxsZXRzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Coding/FinanceTracker/FinanceTracker/Components/Pages/WalletTransaction.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXYWxsZXRUcmFuc2FjdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Coding/FinanceTracker/FinanceTracker/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

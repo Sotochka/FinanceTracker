@@ -34,7 +34,7 @@ public class UserService
 
     public async Task<User> Login(User user)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Login == user.Login && u.Password == user.Password);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Login == user.Login && u.Password == user.Password);
     }
 
     public async Task<User> GetUserByIdAsync(int userId)

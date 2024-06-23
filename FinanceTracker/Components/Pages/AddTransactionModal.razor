@@ -1,24 +1,51 @@
-﻿
-@rendermode InteractiveServer
-@using Microsoft.AspNetCore.Components.Authorization
-@using FinanceTracker.Services
-@using FinanceTracker.Components.Data
+﻿@using FinanceTracker.Services
+@inject CustomAuthStateProvider AuthStateProvider
 
-@inject NavigationManager Navigation
-@inject TransactionService TransactionService
-@inject WalletService WalletService
-@inject AuthenticationStateProvider AuthStateProvider
-@inject UserService UserService
+@code {
+    [Parameter] public int WalletId { get; set; }
+    [Parameter] public EventCallback OnTransactionAdded { get; set; }
 
+    private Transaction newTransaction = new Transaction();
+    private bool isVisible;
 
-@if (Visible)
+    private async Task<int> GetUserIdAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst("UserId");
+        return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
+    }
+
+    public void Show()
+    {
+        newTransaction.WalletId = WalletId; // Set the wallet ID when the modal is shown
+        isVisible = true;
+        StateHasChanged(); // Ensure the component re-renders when the modal is shown
+    }
+
+    public void Hide()
+    {
+        isVisible = false;
+        StateHasChanged(); // Ensure the component re-renders when the modal is hidden
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var userId = await GetUserIdAsync();
+        await TransactionService.AddTransaction(newTransaction, userId);
+        newTransaction = new Transaction { WalletId = WalletId };
+        await OnTransactionAdded.InvokeAsync();
+        Hide();
+    }
+}
+
+@if (isVisible)
 {
     <div class="modal show" tabindex="-1" style="display:block;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Transaction</h5>
-                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                    <button type="button" class="btn-close" @onclick="Hide"></button>
                 </div>
                 <div class="modal-body">                 
                     <EditForm Model="@newTransaction" OnValidSubmit="HandleValidSubmit">
@@ -30,21 +57,12 @@
                             <InputText @bind-Value="newTransaction.Description" />
                         </div>
                         <div>
-                            <label>Category</label>
+                            <label>Category:</label>
                             <InputText @bind-Value="newTransaction.Category"/>
                         </div>
                         <div>
                             <label>Amount:</label>
                             <InputNumber @bind-Value="newTransaction.Amount" />
-                        </div>
-                        <div>
-                            <InputSelect id="wallet" @bind-Value="newTransaction.WalletId">
-                                <option value="">Select Wallet</option>
-                                @foreach (var wallet in wallets)
-                                {
-                                    <option value="@wallet.Id">@wallet.Name</option>
-                                }
-                            </InputSelect>
                         </div>
                         <div>
                             <label for="type">Type:</label>
@@ -63,67 +81,5 @@
 }
 
 @code {
-    private List<Wallet> wallets = new List<Wallet>(); 
-    [Parameter] public bool Visible{get;set;}
-    [Parameter] public EventCallback OnTransactionAdded { get; set; }
-    public string errorMessage;
-
-    private NewTransaction newTransaction = new NewTransaction();
-    
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-            var userIdClaim = authState.User.FindFirst("UserId");
-
-            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-            {
-                wallets = await WalletService.GetWalletsByUserIdAsync(userId);
-            }
-            else
-            {
-                errorMessage = "User ID not found. Please log in again.";
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"An error occurred while fetching wallets: {ex.Message}";
-        }
-    }
-    
-
-    private async Task HandleValidSubmit()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userIdClaim = authState.User.FindFirst("UserId");
-
-        // Assuming you have a method in UserService to get User by login
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-        {
-            var user = await UserService.GetUserByIdAsync(userId);
-            
-            int walletId = newTransaction.WalletId;
-            var transaction = new Transaction
-            {
-                Description = newTransaction.Description,
-                Amount = newTransaction.Amount,
-                Category = newTransaction.Category,
-                Type = newTransaction.Type,
-                UserId = user.Id
-            };
-            await TransactionService.AddTransaction(transaction, walletId);
-            await OnTransactionAdded.InvokeAsync();
-            CloseModal();
-        }
-
-        
-
-    }
-
-    public void CloseModal()
-    {
-        Visible = false;
-    }
-
+    [Inject] private TransactionService TransactionService { get; set; }
 }

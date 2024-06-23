@@ -1,66 +1,60 @@
-﻿@rendermode InteractiveServer
-@using Microsoft.AspNetCore.Components.Authorization
-@using FinanceTracker.Services
-@using FinanceTracker.Components.Data
-
-@inject NavigationManager Navigation
+﻿@using FinanceTracker.Services
 @inject CustomAuthStateProvider AuthStateProvider
-@inject WalletService WalletService
-@inject AuthenticationStateProvider AuthStateProvider
-@inject UserService UserService
+@code {
+    [Parameter] public EventCallback OnWalletAdded { get; set; }
+    private Wallet wallets = new Wallet();
+    private Wallet newWallet = new Wallet();
+    private bool isVisible;
 
-@if (Visible)
+    public void Show() => isVisible = true;
+    public void Hide() => isVisible = false;
+    
+    private async Task<int> GetUserIdAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userIdClaim = authState.User.FindFirst("UserId");
+        return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        var userId = await GetUserIdAsync();
+        await WalletService.AddWalletAsync(newWallet, userId);
+        newWallet = new Wallet(); // Reset the form
+        await OnWalletAdded.InvokeAsync(); 
+        Hide();
+        
+    }
+}
+
+@if (isVisible)
 {
-    <EditForm Model="@wallet" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+<div class="modal" tabindex="-1" role="dialog" style="display:block; background:rgba(0,0,0,0.5);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Wallet</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="Hide">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@newWallet" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <InputText id="name" class="form-control" @bind-Value="wallet.Name" placeholder="Name" />
+                    <div class="form-group">
+                        <label for="walletName">Name</label>
+                        <InputText id="walletName" class="form-control" @bind-Value="newWallet.Name" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Wallet</button>
+                </EditForm>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="balance">Initial Balance</label>
-            <InputNumber id="balance" class="form-control" @bind-Value="wallet.Balance" placeholder="Initial Balance" />
-        </div>
-        <button type="submit" class="btn btn-primary">Add Wallet</button>
-    </EditForm>
+    </div>
+</div>
 }
 
 @code {
-    [Parameter] public bool Visible{get;set;}
-    
-    private Wallet wallet = new Wallet();
-    private string successMessage;
-    private string errorMessage;
-
-    private async Task HandleValidSubmit()
-    {
-        try
-        {
-            // Get the current user's ID
-            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-            var userIdClaim = authState.User.FindFirst("UserId");
-
-            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-            {
-                await WalletService.AddWalletAsync(wallet, userId);
-                successMessage = "Wallet added successfully!";
-                wallet = new Wallet();
-            }
-            else
-            {
-                errorMessage = "User ID not found. Please log in again.";
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"An error occurred: {ex.Message}";
-        }
-    }
-    
-    public void CloseModal()
-    {
-        Visible = false;
-    }
+[Inject] private WalletService WalletService { get; set; }
 }
