@@ -1,18 +1,18 @@
-@layout LoginLayout
 @page "/login"
+@layout LoginLayout
 
 
 @rendermode InteractiveServer
 
 
-@using FinanceTracker.Components.Data
 @using FinanceTracker.Components.Layout
+@using FinanceTracker.Components.Data
 @using FinanceTracker.Services
 @inject UserService UserService
 @inject CustomAuthStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
-
+    
 <PageTitle>Login</PageTitle>
 <div class="login">
     <h2 class="login-heading">Welcome back</h2>
