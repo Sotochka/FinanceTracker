@@ -29,7 +29,7 @@
 
 @if (isVisible)
 {
-<div class="modal" tabindex="-1" role="dialog" style="display:block; background:rgba(0,0,0,0.5);">
+<div class="modal" tabindex="-1" role="dialog" style="display:block; ">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -45,9 +45,9 @@
 
                     <div class="form-group">
                         <label for="walletName">Name</label>
-                        <InputText id="walletName" class="form-control" @bind-Value="newWallet.Name" />
+                        <InputText id="walletName" class="modal-input" @bind-Value="newWallet.Name" placeholder="Family" />
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Wallet</button>
+                    <button type="submit" class="modal-btn">Add Wallet</button>
                 </EditForm>
             </div>
         </div>
@@ -56,5 +56,5 @@
 }
 
 @code {
-[Inject] private WalletService WalletService { get; set; }
+    [Inject] private WalletService WalletService { get; set; }
 }

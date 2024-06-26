@@ -1,0 +1,38 @@
+@page "/"
+@layout LandingLayout
+
+@rendermode InteractiveServer
+
+@using FinanceTracker.Components.Layout 
+@inject NavigationManager Navigation
+
+<header class="header">
+    <div class="container">
+        <div class="landing-header">
+            <p>Finance Tracker</p>
+            <a href="/register">Get started</a>
+        </div>
+        
+    </div>
+</header>
+<main class="landing-page">
+    <div class="container">
+        <div class="landing-header-section">
+            <div>
+                <h1>Keep an eye on your expenses & save money</h1>
+                <p>People save 10% more from their income by monitoring their expenses</p>
+            </div>
+            <div>
+                <a href="/register">Get started</a>
+            </div>
+        </div>  
+    </div>
+</main>
+
+@code {
+
+    private void Navigate()
+    {
+        Navigation.NavigateTo("/register");
+    }
+}

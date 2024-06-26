@@ -13,7 +13,7 @@ public class TransactionService
         _walletService = walletService;
     }   
     
-    //Gets user by it's ID
+    //Gets user by its ID
     public async Task<List<Transaction>> GetTransactionsByUserId(int userId)
     {
         return await _context.Transactions
@@ -23,9 +23,10 @@ public class TransactionService
 
 
     //Add Transaction
-    public async Task AddTransaction(Transaction transaction, int walletId)
+    public async Task AddTransaction(Transaction transaction, int walletId, int userId)
     {
         transaction.WalletId = walletId;
+        transaction.UserId = userId;
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
         await _walletService.UpdateWalletBalanceAsync(walletId);

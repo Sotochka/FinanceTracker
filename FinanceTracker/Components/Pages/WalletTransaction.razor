@@ -1,12 +1,16 @@
 @page "/wallets/{walletId:int}"
+
+@rendermode InteractiveServer
 @using FinanceTracker.Components.Data
 @using FinanceTracker.Services
-@inject WalletService WalletService
-@inject UserService UserService
+
 @inject TransactionService TransactionService
 @inject CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Navigation
 
 <h3 class="page-title">Transactions for Wallet @WalletId</h3>
+
+<AddTransactionModal @ref="addTransactionModal" WalletId="@WalletId" OnTransactionAdded="OnTransactionAdded" />
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -48,7 +52,6 @@ else
     </div>
 }
 
-<AddTransactionModal @ref="addTransactionModal" WalletId="@WalletId" OnTransactionAdded="OnTransactionAdded" />
 
 
 @code {
@@ -70,27 +73,19 @@ else
     
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            transactions = await TransactionService.GetTransactionsByWalletIdAsync(WalletId);
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"An error occurred while fetching transactions: {ex.Message}";
-        }
+        transactions = await TransactionService.GetTransactionsByWalletIdAsync(WalletId);
     }
     
     private async Task DeleteTransaction(int transactionId)
     {
         var userId = await GetUserIdAsync();
+        await TransactionService.DeleteTransaction(transactionId);
         transactions = await TransactionService.GetTransactionsByUserId(userId);
-        StateHasChanged();
     }
     
     private async Task LoadTransactions()
     {
-        var userId = await GetUserIdAsync();
-        transactions = await TransactionService.GetTransactionsByUserId(userId);
+        transactions = await TransactionService.GetTransactionsByWalletIdAsync(WalletId);
     }
     
     private async Task OnTransactionAdded()

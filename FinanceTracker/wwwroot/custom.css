@@ -1,4 +1,27 @@
 /*
+    Landing Page
+*/
+.container{
+    width: 1110px;
+}
+.header{
+    background: #000010FF;
+}
+.landing-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.landing-header-section{
+    background: #000010FF;
+}
+
+
+
+
+
+/*
 Register page
 */
 .register{
@@ -187,6 +210,7 @@ Login page
 
 .wallet-list{
     display: flex;
+    flex-wrap: wrap;
 }
 .wallet-balance{
     display: flex;
@@ -258,9 +282,40 @@ Login page
     cursor: pointer;
 }
 
+.lists{
+    display: flex;
+    flex-direction: row;
+}
 
+.lists-item{
+    margin-right: 20px;
+}
 
+.total-money{
+    display: flex;
+    width: 270px;
+    height: auto;
+    flex-direction: column;
+}
 
+.total-money-item{
+    color: #fff;
+    background: #1d1e22;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    height: 40px;
+    padding: 10px 15px 10px 15px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.total-money-balance{
+    margin: 0;
+}
+.total-money-balance-cur{
+    margin: 0;
+}
 
 /*
     Wallets
@@ -290,6 +345,71 @@ Login page
 }
 .wallet-name:hover{
     background: #2A2A30FF;
+}
+
+
+/*Modal windows*/
+.form-group{
+    display: flex;
+    flex-direction: column;
+}
+
+.modal{
+    background: rgba(255,255,255,0.4);
+}
+.btn-close{
+    background: white;
+}
+
+.modal-content{
+    background: #000025;
+    color: #CCCCCCCC;
+    border-radius: 10px;
+}
+.amount-description{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.modal-amount{
+    display: flex;
+    flex-direction: column;
+}
+.modal-description{
+    display: flex;
+    flex-direction: column;
+    
+}
+.modal-category{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.modal-type{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+.modal-btn{
+    width: 100%;
+    background: #fff;
+    border-radius:10px;
+    height: 40px;
+}
+.modal-label{
+    font-size: 14px;
+}
+.modal-input{
+    background: #000025;
+    border:1px solid #CCCCCCCC;
+    border-radius: 6px;
+    color: #CCCCCCCC;
+    height: 35px;
+}
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 

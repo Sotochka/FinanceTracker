@@ -44,33 +44,45 @@
             </div>
         }
     </div>
-
-    <div class="transaction-list">
-        @if (transactions != null)
-        {
-            <h2 class="transaction-heading">Last Transaction</h2>
-            @foreach (var transaction in transactions)
-            {
-                <div class="transaction-item">
-                    <div class="transaction-item-content">
-                        @if (transaction.Type == "Receive")
-                        {
-                            <p class="transaction-item-amount green">+@transaction.Amount UAH</p>
-                        }
-                        else
-                        {
-                            <p class="transaction-item-amount">@transaction.Amount UAH</p>
-                        }
-                        <p class="transaction-item-description">@transaction.Description</p>
-                    </div>
-                    <img @onclick="() => DeleteTransaction(transaction.Id)" class="transaction-item-btn" src="Delete-button.svg.png"/>
+    <div class="lists">
+        <div class="lists-item">
+            <div class="transaction-list">
+                @if (transactions != null)
+                {
+                    <h2 class="transaction-heading">Last Transaction</h2>
+                    @foreach (var transaction in transactions)
+                    {
+                        <div class="transaction-item">
+                            <div class="transaction-item-content">
+                                @if (transaction.Type == "Receive")
+                                {
+                                    <p class="transaction-item-amount green">+@transaction.Amount UAH</p>
+                                }
+                                else
+                                {
+                                    <p class="transaction-item-amount">@transaction.Amount UAH</p>
+                                }
+                                <p class="transaction-item-description">@transaction.Description</p>
+                            </div>
+                            <img @onclick="() => DeleteTransaction(transaction.Id)" class="transaction-item-btn" src="Delete-button.svg.png"/>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Loading...</p>
+                }
+            </div>
+        </div>
+        <div class="lists-item">
+            <div class="total-money">
+                <h2 class="transaction-heading">Total money</h2>
+                <div class="total-money-item">
+                    <p class="total-money-balance">@totalBalance</p>
+                    <p class="total-money-balance-cur">UAH</p>
                 </div>
-            }
-        }
-        else
-        {
-            <p>Loading...</p>
-        }
+            </div>
+        </div>
     </div>
 
 </main>
@@ -81,6 +93,7 @@
     private List<Transaction> transactions;
     private List<Wallet> wallets;
     private User user;
+    private decimal totalBalance;
 
     private async Task<int> GetUserIdAsync()
     {
@@ -95,6 +108,7 @@
         user = await UserService.GetUserByIdAsync(userId);
         await LoadWallets();
         await LoadTransactions();
+        totalBalance = await WalletService.GetTotalBalance(); 
     }
     
     private async Task LoadTransactions()
@@ -122,8 +136,8 @@
     private async Task DeleteTransaction(int transactionId)
     {
         var userId = await GetUserIdAsync();
-            transactions = await TransactionService.GetTransactionsByUserId(userId);
-            StateHasChanged();
+        await TransactionService.DeleteTransaction(transactionId);
+        transactions = await TransactionService.GetTransactionsByUserId(userId);
     }
     
     private async Task OnWalletAdded()

@@ -166,11 +166,11 @@ main[b-w6u312s9ke] {
 }
 
     .nav-item:first-of-type[b-d46exmof0k] {
-        padding-top: 1rem;
+        padding-top: 0.5rem;
     }
 
     .nav-item:last-of-type[b-d46exmof0k] {
-        padding-bottom: 1rem;
+        padding-bottom: 0.5rem;
     }
 
     .nav-item[b-d46exmof0k]  .nav-link {

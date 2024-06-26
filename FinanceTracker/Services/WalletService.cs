@@ -44,6 +44,10 @@ public class WalletService
 
         return balance;
     }
+    public async Task<decimal> GetTotalBalance()
+    {
+        return await _context.Wallets.SumAsync(w => w.Balance);
+    }
     public async Task UpdateWalletBalanceAsync(int walletId)
     {
         var transactions = await _context.Transactions
