@@ -18,7 +18,7 @@
     <h1 class="page-title">Dashboard</h1>
     <div class="logout">
         <button @onclick="ShowAddWalletModal" class="add-wallet-btn">Add New Wallet</button>
-        <button @onclick="Logout" class="logout-btn">Logout</button>
+        <button @onclick="Logout" class="add-wallet-btn">Logout</button>
     </div>
 </header>
 
@@ -108,7 +108,7 @@
         user = await UserService.GetUserByIdAsync(userId);
         await LoadWallets();
         await LoadTransactions();
-        totalBalance = await WalletService.GetTotalBalance(); 
+        totalBalance = await WalletService.GetTotalBalance(userId); 
     }
     
     private async Task LoadTransactions()

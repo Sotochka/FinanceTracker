@@ -9,6 +9,30 @@
       "PackagePath": "staticwebassets\\Delete-button.svg.png"
     },
     {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\LandingPageImg.png",
+      "PackagePath": "staticwebassets\\LandingPage\\LandingPageImg.png"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\LandingPagePhoto.png",
+      "PackagePath": "staticwebassets\\LandingPage\\LandingPagePhoto.png"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\Subscription.png",
+      "PackagePath": "staticwebassets\\LandingPage\\Subscription.png"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\Subscriptions.png",
+      "PackagePath": "staticwebassets\\LandingPage\\Subscriptions.png"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\transactions.png",
+      "PackagePath": "staticwebassets\\LandingPage\\transactions.png"
+    },
+    {
+      "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\LandingPage\\wallets.png",
+      "PackagePath": "staticwebassets\\LandingPage\\wallets.png"
+    },
+    {
       "Id": "D:\\Coding\\FinanceTracker\\FinanceTracker\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
     },

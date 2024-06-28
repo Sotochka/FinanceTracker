@@ -44,9 +44,11 @@ public class WalletService
 
         return balance;
     }
-    public async Task<decimal> GetTotalBalance()
+    public async Task<decimal> GetTotalBalance(int userId)
     {
-        return await _context.Wallets.SumAsync(w => w.Balance);
+        return await _context.Wallets
+                             .Where(w => w.UserId == userId)
+                             .SumAsync(w => w.Balance);
     }
     public async Task UpdateWalletBalanceAsync(int walletId)
     {
@@ -68,5 +70,10 @@ public class WalletService
         }
     }
 
-
+    public async Task<string> GetWalletNameAsync(int walletId)
+    {
+        var wallet = await _context.Wallets
+            .FindAsync(walletId);
+        return wallet.Name;
+    }
 }

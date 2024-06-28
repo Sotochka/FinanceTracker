@@ -1,38 +1,69 @@
 @page "/"
 @layout LandingLayout
 
-@rendermode InteractiveServer
+@using FinanceTracker.Components.Layout
 
-@using FinanceTracker.Components.Layout 
-@inject NavigationManager Navigation
-
-<header class="header">
+<header class="header-landing-page">
     <div class="container">
         <div class="landing-header">
-            <p>Finance Tracker</p>
-            <a href="/register">Get started</a>
+            <h2 class="header-logo">Finance Tracker</h2>
+            <a href="/register" class="landing-page-btn">Get started</a>
         </div>
         
     </div>
 </header>
 <main class="landing-page">
-    <div class="container">
-        <div class="landing-header-section">
-            <div>
-                <h1>Keep an eye on your expenses & save money</h1>
-                <p>People save 10% more from their income by monitoring their expenses</p>
+    <section class="header-section">
+        <div class="container">
+            <div class="landing-header-section">
+                <div class="landing-header-text">
+                    <p class="landing-heading">Keep an eye on your expenses & save money</p>
+                    <p class="landing-heading-text">People save 10% more from their income by monitoring their expenses</p>
+                </div>
+                <div class="landing-page-button-section">
+                    <a href="/register" class="landing-page-btn">Get started</a>
+                </div>
             </div>
-            <div>
-                <a href="/register">Get started</a>
+        </div>
+         <div class="landing-header-image">
+            <img src="/LandingPage/LandingPagePhoto.png" alt="photo-of-a-program" class="landing-page-main-img" width="100%" height="100%">
+        </div>
+    </section>
+    <section class="features-section">
+        <div class="container">
+            <div class="feature-item feature-item-wallets">
+                <div class="feature-item-text">
+                    <h2 class="feature-item-text-heading">Personal Wallets</h2>
+                    <p class="feature-item-text-par">Track and analyze your finances by the wallets you get</p>
+                </div>
+                <div class="feature-item-img">
+                    <img src="/LandingPage/wallets.png" alt="wallets" class="feature-item-image">
+                </div>
             </div>
-        </div>  
-    </div>
+            <div class="feature-item feature-item-second">
+                <div class="feature-item-text">
+                    <h2 class="feature-item-text-heading">Subscriptions</h2>
+                    <p class="feature-item-text-par">More than 27% of people forget about paying for subscriptions or don't know about monthly fees in their bank account. </p>
+                </div>
+                <div class="feature-item-img">
+                    <img src="/LandingPage/Subscription.png" alt="wallets" class="feature-item-image">
+                </div>
+            </div>
+            <div class="feature-item feature-item-trird">
+                <div class="feature-item-text">
+                    <h2 class="feature-item-text-heading">Last transactions</h2>
+                    <p class="feature-item-text-par">See what was your last transactions and how much money do you have</p>
+                </div>
+                <div class="feature-item-img">
+                    <img src="/LandingPage/transactions.png" alt="wallets" class="feature-item-image">
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
+<footer class="footer">
+
+</footer>
 
 @code {
-
-    private void Navigate()
-    {
-        Navigation.NavigateTo("/register");
-    }
 }

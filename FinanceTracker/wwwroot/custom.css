@@ -4,20 +4,195 @@
 .container{
     width: 1110px;
 }
-.header{
-    background: #000010FF;
+.header-landing-page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 4;
+    background: #202235;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
+
 .landing-header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
+.header-logo{
+    font-size: 25px;
+    margin: 0px;
+    color: #fff;
+    line-height: inherit;
+}
 .landing-header-section{
-    background: #000010FF;
+    background: #202235;
+}
+.landing-page{
+    color: #fff;
+}
+
+.landing-page-button-section{
+    z-index: 1;
+}
+
+.header-section{
+    background: #202235;
+    height: 680px;
+}
+.landing-header-section{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding-top: 100px;
+    margin: auto;
+    width: 600px;
+}
+.landing-header-image{
+    display: flex;
+    justify-content: center;
+}
+
+.landing-page-main-img{
+    margin-top: -320px;
+    z-index: 0;
+}
+
+.landing-heading{
+    font-size: 3rem;
+    font-weight: bold;
+}
+.landing-heading-text{
+    color: #a1a1a1;
+    font-size: 22px;
 }
 
 
+.landing-page-btn{
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
+    background: #fff;
+    color: #222222;
+    border-radius: 10px;
+}
+
+.features-section{
+    position: relative;
+    background-color: #000;
+}
+
+.feature-item{
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 0px;
+}
+.feature-item-second{
+    flex-direction: row-reverse;
+}
+
+.feature-item-text{
+    width: 60%;
+}
+
+.feature-item-text-heading{
+    color: #fff;
+    font-size: 3rem;
+}
+.feature-item-text-par{
+    color: #a1a1a1;
+    font-size: 1.2rem;
+    padding-right: 5px;
+}
+
+.feature-item-img{
+    position: relative;
+    width: 500px;
+    border-radius: 10px;
+    border: 5px solid #202235;
+}
+.feature-item-second{
+    text-align: right;
+}
+
+.feature-item-image{
+    width: 100%;
+    border-radius: 4px;
+}
+/* 493 × 276 px */
+
+.features-section-wallets{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+@media(max-width: 1300px){
+    .landing-page-main-img{
+        margin-top: -180px;
+    }
+}
+
+@media(max-width: 992px){
+    .header-section{
+        height: 580px;
+    }
+    .landing-page-main-img{
+        margin-top: -180px;
+    }
+}
+
+@media(max-width: 767px){
+    .landing-header-section{
+        width: auto;
+    }
+    .feature-item{
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    .feature-item-text{
+        width: auto;
+    }
+}
+
+
+@media(max-width: 575px){
+    .container{
+        width: auto;
+    }
+    .landing-page-main-img {
+        margin-top: -100px;
+        z-index: 0;
+    }
+}
+
+
+@media(max-width: 575px){
+    .landing-page-main-img {
+        margin-top: -50px;
+        z-index: 0;
+    }
+}
+
+@media(max-width: 376px){
+    .landing-heading{
+        font-size: 2rem;
+    }
+    .landing-heading-text {
+        font-size: 15px;
+    }
+    .header-section{
+        height: 480px;
+    }
+}
 
 
 
@@ -33,10 +208,13 @@ Register page
     border-radius: 10px;
     padding: 30px;
 }
+.register-heading{
+    margin-top: 0px;
+}
 
 .register-text{
-    font-size: 11px;
-    margin-top: 5px;
+    font-size: 13px;
+    margin-top: 0px;
 }
 
 .register-form{
@@ -102,9 +280,13 @@ Login page
     padding: 30px;
 }
 
+.login-heading{
+    margin-bottom: 0px;
+}
+
 .login-text{
-    font-size: 11px;
-    margin-top: 5px;
+    font-size: 13px;
+    margin-top: 0px;
 }
 
 .login-form{
@@ -167,7 +349,8 @@ Login page
     border-radius: 10px;
     color: white;
     margin-right: 10px;
-    width: 130px;
+    width: 150px;
+    height: 40px;
 }
 .add-wallet-btn:hover {
     background: rgba(255,255,255,0.1);
@@ -317,6 +500,34 @@ Login page
     margin: 0;
 }
 
+@media(max-width: 835px) {
+    .sidebar{
+        height: auto !important;
+    }
+}
+
+
+@media(max-width: 590px) {
+    .lists{
+        flex-direction: column-reverse;
+    }
+}
+
+@media(max-width: 473px) {
+    .header{
+        height: auto;
+        flex-direction: column-reverse;
+    }
+    .logout{
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+
+
+
 /*
     Wallets
 */
@@ -345,6 +556,27 @@ Login page
 }
 .wallet-name:hover{
     background: #2A2A30FF;
+}
+
+@media(max-width: 640px){
+    .page{
+        height: 100%;
+    }
+}
+
+@media(max-width: 474px){
+    .wallet-balance{
+        width: 150px;
+    }
+    .wallet-list{
+        justify-content: space-between;
+    }
+}
+
+@media(max-width: 373px){
+    .wallet-balance{
+        width: 120px;
+    }
 }
 
 
@@ -412,5 +644,12 @@ input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
-
+@media(max-width: 460px){
+    .amount-description{
+        flex-direction: column;
+    }
+    .modal-description{
+        margin-bottom: 10px;
+    }
+}
 

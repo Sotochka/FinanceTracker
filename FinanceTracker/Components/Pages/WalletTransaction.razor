@@ -5,12 +5,19 @@
 @using FinanceTracker.Services
 
 @inject TransactionService TransactionService
+@inject WalletService WalletService
 @inject CustomAuthStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
-<h3 class="page-title">Transactions for Wallet @WalletId</h3>
+<header class="header">
+    <h3 class="page-title">Transactions for @walletName</h3>
+    <button @onclick="DeleteWallet" class="add-wallet-btn">Delete Wallet</button>
+</header>
+
+
 
 <AddTransactionModal @ref="addTransactionModal" WalletId="@WalletId" OnTransactionAdded="OnTransactionAdded" />
+
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -48,7 +55,7 @@ else
         {
             <p>Loading...</p>
         }
-        <button @onclick="ShowAddTransactionModal" class="btn btn-primary">Add Transaction</button>
+        <button @onclick="ShowAddTransactionModal" class="add-wallet-btn">Add Transaction</button>
     </div>
 }
 
@@ -58,10 +65,11 @@ else
     [Parameter] public int WalletId { get; set; }
     
     private AddTransactionModal addTransactionModal;
+    private List<Wallet> wallets;
+    private string walletName;
     private List<Transaction> transactions = new();
     private string errorMessage;
     private Wallet wallet;
-    private List<Wallet> wallets;
     private User user;
 
     private async Task<int> GetUserIdAsync()
@@ -71,9 +79,15 @@ else
         return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
     }
     
+    private async Task DeleteWallet()
+    {
+        await WalletService.DeleteWalletAsync(WalletId);
+        Navigation.NavigateTo("/home");
+    }
     protected override async Task OnInitializedAsync()
     {
         transactions = await TransactionService.GetTransactionsByWalletIdAsync(WalletId);
+        walletName = await WalletService.GetWalletNameAsync(WalletId);
     }
     
     private async Task DeleteTransaction(int transactionId)
