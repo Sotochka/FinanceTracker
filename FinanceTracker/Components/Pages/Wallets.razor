@@ -12,8 +12,15 @@
 @inject NavigationManager Navigation
 
 <PageTitle>Wallets</PageTitle>
- 
-<h1 class="page-title">Wallets</h1>
+
+
+<AddWalletModal @ref="addWalletModal" OnWalletAdded="OnWalletAdded" />
+
+
+<header class="header">
+    <h1 class="page-title">Wallets</h1>
+    <button @onclick="ShowAddWalletModal" class="add-wallet-btn">Add New Wallet</button>
+</header>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -36,6 +43,7 @@ else
 
 
 @code {
+    private AddWalletModal addWalletModal;
     private List<Wallet> wallets = new List<Wallet>();
     private string errorMessage;
 
@@ -45,7 +53,7 @@ else
         try
         {
             // Assuming you have a method to get the user ID from the current authentication state
-            var userId = await GetCurrentUserIdAsync();
+            var userId = await GetUserIdAsync();
             wallets = await WalletService.GetWalletsByUserIdAsync(userId);
         }
         catch (Exception ex)
@@ -54,11 +62,32 @@ else
         }
     }
     
-    private async Task<int> GetCurrentUserIdAsync()
+    private async Task<int> GetUserIdAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var userIdClaim = authState.User.FindFirst("UserId");
         return userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId) ? userId : 0;
     }
-    
+
+    private async Task LoadWallets()
+    {
+        var userId = await GetUserIdAsync();
+        wallets = await WalletService.GetWalletsByUserIdAsync(userId);
+
+        foreach (var wallet in wallets)
+        {
+            wallet.Balance = await WalletService.GetWalletBalanceAsync(wallet.Id);
+        }
+    }
+
+    private async Task OnWalletAdded()
+    {
+        await LoadWallets();
+    }
+
+    private void ShowAddWalletModal()
+    {
+        addWalletModal.Show();
+    }
+
 }
