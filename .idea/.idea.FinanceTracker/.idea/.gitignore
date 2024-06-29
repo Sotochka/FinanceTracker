@@ -12,4 +12,8 @@
 /dataSources/
 /dataSources.local.xml
 /appsettings.json
+appsettings.json
 /appsettings.Development.json
+appsettings.Development.json
+/FinanceTracker/appsettings.json
+/FinanceTracker/appsettings.Development.json
